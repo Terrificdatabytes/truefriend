@@ -3,6 +3,7 @@ import { X, Download, FileImage, FileText, FileJson, Loader } from 'lucide-react
 import { jsPDF } from 'jspdf';
 // html2canvas imported but not used yet - reserved for future canvas-based PDF generation
 // import html2canvas from 'html2canvas';
+import QRCode from 'qrcode';
 import { DIMENSIONS } from '../constants/questions';
 import { getDisclaimer } from '../constants/disclaimers';
 import confetti from 'canvas-confetti';
@@ -23,6 +24,17 @@ const ReportGenerator = ({ results, language, onClose }) => {
       };
 
       const { width, height } = dimensions[size];
+      const appURL = 'https://terrificdatabytes.github.io/truefriend/';
+
+      // Generate QR code as data URL
+      const qrCodeDataUrl = await QRCode.toDataURL(appURL, {
+        width: 150,
+        margin: 1,
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF'
+        }
+      });
 
       // Create a canvas element
       const canvas = document.createElement('canvas');
@@ -123,24 +135,44 @@ const ReportGenerator = ({ results, language, onClose }) => {
       ctx.fillStyle = '#4b5563';
       ctx.fillText('Not professional advice • Visit app for full disclaimer', width / 2, 1030);
 
-      // Convert to blob and download
-      canvas.toBlob((blob) => {
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `FriendshipReport_${results.friendName || 'Assessment'}_${size}_${Date.now()}.png`;
-        link.click();
-        URL.revokeObjectURL(url);
+      // Add QR Code and URL at the bottom
+      const qrImage = new Image();
+      qrImage.onload = () => {
+        // Draw QR code on the right side
+        const qrSize = 120;
+        const qrX = width - 200;
+        const qrY = height - 160;
+        ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
 
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 }
+        // Add URL text on the left of QR code
+        ctx.fillStyle = '#1f2937';
+        ctx.font = 'bold 20px Arial';
+        ctx.textAlign = 'left';
+        ctx.fillText('Take your assessment:', 80, height - 110);
+        ctx.fillStyle = '#9333ea';
+        ctx.font = '18px Arial';
+        ctx.fillText(appURL, 80, height - 80);
+
+        // Convert to blob and download
+        canvas.toBlob((blob) => {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `FriendshipReport_${results.friendName || 'Assessment'}_${size}_${Date.now()}.png`;
+          link.click();
+          URL.revokeObjectURL(url);
+
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+
+          setGenerating(false);
+          setGeneratingType('');
         });
-
-        setGenerating(false);
-        setGeneratingType('');
-      });
+      };
+      qrImage.src = qrCodeDataUrl;
     } catch (error) {
       console.error('Error generating PNG:', error);
       alert('Error generating PNG. Please try again.');

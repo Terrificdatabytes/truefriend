@@ -436,6 +436,8 @@ const FriendshipHealthCheckup = () => {
 
           <FeedbackWidget results={results} language={language} />
 
+          <ViewCounter language={language} />
+
           <DisclaimerBanner language={language} variant="results" />
 
           <div className="text-center mt-8">

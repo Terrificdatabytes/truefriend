@@ -59,7 +59,7 @@ const ShareModal = ({ results, language, onClose }) => {
     if (platform === 'whatsapp') {
       const url = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
       window.open(url, '_blank');
-    } else if (platform === 'copy') {
+    } else if (platform === 'instagram' || platform === 'linkedin' || platform === 'copy') {
       try {
         await navigator.clipboard.writeText(shareText);
         setCopied(true);
