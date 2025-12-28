@@ -1,16 +1,81 @@
-# React + Vite
+# 🧠💖 Friendship Health Checkup
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A comprehensive, privacy-focused web application for assessing friendship health across 10 psychological dimensions. Built with React, featuring bilingual support (English/Tanglish), and designed for entertainment and self-reflection.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 📊 Comprehensive Assessment
+- **150 Questions** across 10 psychological dimensions:
+  - 🤝 Trust & Reliability
+  - 💬 Communication
+  - ❤️ Emotional Support
+  - 🙏 Mutual Respect
+  - 🛡️ Boundaries
+  - 🌱 Personal Growth
+  - 🎉 Fun & Enjoyment
+  - ⚖️ Conflict Resolution
+  - 🔒 Loyalty
+  - ✨ Authenticity
 
-## React Compiler
+### 🌍 Bilingual Support
+- English
+- Tanglish (Tamil-English mix)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 📱 Report Generation (100% Client-Side)
+Generate professional reports in three formats:
+- **PNG Images** (Instagram 1080x1080, LinkedIn 1200x627, Story 1080x1920)
+- **PDF Report** (Multi-page with detailed analysis)
+- **JSON Export** (Raw data for developers)
 
-## Expanding the ESLint configuration
+### 📤 Social Media Sharing
+Share your results on:
+- 💬 WhatsApp
+- 📸 Instagram
+- 💼 LinkedIn
+- 📋 Copy to Clipboard
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### ⚠️ Comprehensive Disclaimers
+Disclaimers appear on EVERY screen in both languages.
+
+### 🔒 Privacy-First Design
+- **100% Client-Side**: No server communication except view counter
+- **localStorage Only**: All data stays in your browser
+- **No Tracking**: No analytics or tracking cookies
+
+### 💬 Anonymous Feedback System
+- Collect feedback about assessment accuracy
+- Store anonymously in localStorage (JSON format)
+- No personal information collected
+
+### 🔍 SEO Optimized
+- Comprehensive meta tags
+- Open Graph support
+- Twitter Card support
+- JSON-LD structured data
+
+## 🚀 Quick Start
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## ⚠️ Important Disclaimer
+
+**FOR ENTERTAINMENT PURPOSES ONLY**
+
+This assessment is designed for entertainment and self-reflection purposes only. It should NOT be considered as professional psychological evaluation, therapy, or relationship counseling.
+
+## 📄 License
+
+MIT License
+
+---
+
+Made with ❤️ for better friendships
