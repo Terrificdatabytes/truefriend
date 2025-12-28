@@ -257,7 +257,7 @@ const FriendshipHealthCheckup = () => {
                 className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-all"
               >
                 <ChevronLeft className="w-5 h-5" />
-                <span>{language === 'english' ? 'Back' : 'Back'}</span>
+                <span>{language === 'english' ? 'Back' : 'Pinnaadi'}</span>
               </button>
             </div>
           )}

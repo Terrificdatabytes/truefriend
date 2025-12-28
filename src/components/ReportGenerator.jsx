@@ -137,6 +137,27 @@ const ReportGenerator = ({ results, language, onClose }) => {
 
       // Add QR Code and URL at the bottom
       const qrImage = new Image();
+      
+      const downloadCanvas = () => {
+        canvas.toBlob((blob) => {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `FriendshipReport_${results.friendName || 'Assessment'}_${size}_${Date.now()}.png`;
+          link.click();
+          URL.revokeObjectURL(url);
+
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+
+          setGenerating(false);
+          setGeneratingType('');
+        });
+      };
+      
       qrImage.onload = () => {
         // Draw QR code on the right side
         const qrSize = 120;
@@ -153,46 +174,15 @@ const ReportGenerator = ({ results, language, onClose }) => {
         ctx.font = '18px Arial';
         ctx.fillText(appURL, 80, height - 80);
 
-        // Convert to blob and download
-        canvas.toBlob((blob) => {
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = `FriendshipReport_${results.friendName || 'Assessment'}_${size}_${Date.now()}.png`;
-          link.click();
-          URL.revokeObjectURL(url);
-
-          confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
-          });
-
-          setGenerating(false);
-          setGeneratingType('');
-        });
+        downloadCanvas();
       };
+      
       qrImage.onerror = () => {
         console.error('Failed to load QR code image');
         // Continue without QR code - just download what we have
-        canvas.toBlob((blob) => {
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = `FriendshipReport_${results.friendName || 'Assessment'}_${size}_${Date.now()}.png`;
-          link.click();
-          URL.revokeObjectURL(url);
-
-          confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
-          });
-
-          setGenerating(false);
-          setGeneratingType('');
-        });
+        downloadCanvas();
       };
+      
       qrImage.src = qrCodeDataUrl;
     } catch (error) {
       console.error('Error generating PNG:', error);
