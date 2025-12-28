@@ -93,7 +93,7 @@ export const getSettings = () => {
   try {
     const data = localStorage.getItem(STORAGE_KEYS.SETTINGS);
     return data ? JSON.parse(data) : { language: 'english' };
-  } catch (error) {
+  } catch {
     return { language: 'english' };
   }
 };

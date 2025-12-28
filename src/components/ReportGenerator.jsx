@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { X, Download, FileImage, FileText, FileJson, Loader } from 'lucide-react';
 import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas';
+// html2canvas imported but not used yet - reserved for future canvas-based PDF generation
+// import html2canvas from 'html2canvas';
 import { DIMENSIONS } from '../constants/questions';
 import { getDisclaimer } from '../constants/disclaimers';
 import confetti from 'canvas-confetti';

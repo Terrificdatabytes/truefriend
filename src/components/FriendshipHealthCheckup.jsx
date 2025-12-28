@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Heart, AlertTriangle, Share2, Download, BarChart3, Eye, CheckCircle } from 'lucide-react';
+import { Heart, AlertTriangle, Share2, Download, BarChart3, CheckCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { QUESTIONS, DIMENSIONS, getScoreCategory } from '../constants/questions';
-import { getDisclaimer } from '../constants/disclaimers';
 import { saveAssessment, saveSettings, getSettings } from '../utils/storage';
 import DisclaimerBanner from './DisclaimerBanner';
 import ViewCounter from './ViewCounter';
@@ -400,7 +399,7 @@ const FriendshipHealthCheckup = () => {
                 {language === 'english' ? 'Top Strengths' : 'Top Strengths'}
               </h3>
               <div className="space-y-3">
-                {results.strengths.map((strength, idx) => (
+                {results.strengths.map((strength) => (
                   <div key={strength.id} className="flex items-center gap-3">
                     <div className="text-2xl">{strength.icon}</div>
                     <div className="flex-1">
@@ -420,7 +419,7 @@ const FriendshipHealthCheckup = () => {
                 {language === 'english' ? 'Areas for Growth' : 'Grow Panna Vendiya Areas'}
               </h3>
               <div className="space-y-3">
-                {results.improvements.map((improvement, idx) => (
+                {results.improvements.map((improvement) => (
                   <div key={improvement.id} className="flex items-center gap-3">
                     <div className="text-2xl">{improvement.icon}</div>
                     <div className="flex-1">

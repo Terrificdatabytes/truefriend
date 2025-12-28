@@ -50,7 +50,7 @@ const ShareModal = ({ results, language, onClose }) => {
           origin: { y: 0.7 }
         });
         return;
-      } catch (err) {
+      } catch {
         // Fallback to other methods
       }
     }
