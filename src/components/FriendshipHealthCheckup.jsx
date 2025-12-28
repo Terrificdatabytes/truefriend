@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Heart, AlertTriangle, Share2, Download, BarChart3, CheckCircle, ChevronLeft } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { QUESTIONS, DIMENSIONS, getScoreCategory } from '../constants/questions';
+import { QUESTIONS, DIMENSIONS, getScoreCategory, getDimensionName } from '../constants/questions';
 import { saveAssessment, saveSettings, getSettings } from '../utils/storage';
 import DisclaimerBanner from './DisclaimerBanner';
 import ViewCounter from './ViewCounter';
@@ -106,12 +106,15 @@ const FriendshipHealthCheckup = () => {
     const selfCenteredDetected = meTotal < themTotal - 20;
 
     // Get top 3 strengths and areas for improvement
-    const dimensionArray = Object.entries(dimensionScores).map(([id, scores]) => ({
-      id,
-      name: DIMENSIONS.find(d => d.id === id)?.name || id,
-      icon: DIMENSIONS.find(d => d.id === id)?.icon || '📊',
-      score: scores.total
-    }));
+    const dimensionArray = Object.entries(dimensionScores).map(([id, scores]) => {
+      const dimension = DIMENSIONS.find(d => d.id === id);
+      return {
+        id,
+        name: getDimensionName(dimension, language) || id,
+        icon: dimension?.icon || '📊',
+        score: scores.total
+      };
+    });
 
     dimensionArray.sort((a, b) => b.score - a.score);
     const strengths = dimensionArray.slice(0, 3);
@@ -266,7 +269,7 @@ const FriendshipHealthCheckup = () => {
           <div className="bg-white rounded-2xl shadow-xl p-8">
             <div className="mb-6">
               <span className="inline-block px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium mb-4">
-                {DIMENSIONS.find(d => d.id === question.dimension)?.icon} {DIMENSIONS.find(d => d.id === question.dimension)?.name}
+                {DIMENSIONS.find(d => d.id === question.dimension)?.icon} {getDimensionName(DIMENSIONS.find(d => d.id === question.dimension), language)}
               </span>
               <h2 className="text-2xl font-bold text-gray-800">
                 {question.text}
@@ -362,7 +365,7 @@ const FriendshipHealthCheckup = () => {
                   <div key={dim.id}>
                     <div className="flex justify-between items-center mb-2">
                       <span className="font-medium text-gray-700">
-                        {dim.icon} {dim.name}
+                        {dim.icon} {getDimensionName(dim, language)}
                       </span>
                       <span className="font-bold" style={{ color: dimCategory.color }}>
                         {Math.round(score)}%
