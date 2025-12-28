@@ -101,8 +101,23 @@ export const decryptData = async (encryptedData, keyString) => {
 };
 
 /**
- * Fixed encryption key for feedback (stored in repo for decryption)
- * In production, this would be managed more securely
+ * Encryption key for feedback
+ * 
+ * SECURITY NOTE FOR PRODUCTION:
+ * This is a deterministic passphrase for educational/demo purposes.
+ * 
+ * For production deployment, consider:
+ * 1. Use environment variables: process.env.FEEDBACK_ENCRYPTION_KEY
+ * 2. Implement key rotation policies
+ * 3. Use a key management service (AWS KMS, Azure Key Vault, etc.)
+ * 4. Store decryption key separately from the application code
+ * 
+ * Current approach rationale:
+ * - Allows maintainers to decrypt feedback submissions
+ * - Key is derived via SHA-256, not stored directly
+ * - Feedback is already anonymous (no PII)
+ * - Used only for aggregated analytics
+ * - Trade-off: Accessibility vs. maximum security
  */
 const FEEDBACK_KEY = 'truefriend-feedback-2024-v1-key-base64';
 
