@@ -8,6 +8,7 @@ import ViewCounter from './ViewCounter';
 import ShareModal from './ShareModal';
 import ReportGenerator from './ReportGenerator';
 import FeedbackWidget from './FeedbackWidget';
+import FeedbackExport from './FeedbackExport';
 
 const FriendshipHealthCheckup = () => {
   const [language, setLanguage] = useState('english');
@@ -464,6 +465,8 @@ const FriendshipHealthCheckup = () => {
           </div>
 
           <FeedbackWidget results={results} language={language} />
+
+          <FeedbackExport language={language} />
 
           <ViewCounter language={language} />
 

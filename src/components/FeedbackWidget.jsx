@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { MessageSquare, ThumbsUp, ThumbsDown, Star, Send, Check } from 'lucide-react';
+import { MessageSquare, ThumbsUp, ThumbsDown, Star, Send, Check, Download } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { encryptFeedback } from '../utils/encryption';
 
 const FeedbackWidget = ({ results, language }) => {
   const [showFeedback, setShowFeedback] = useState(false);
@@ -10,7 +11,7 @@ const FeedbackWidget = ({ results, language }) => {
   const [comments, setComments] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const saveFeedback = () => {
+  const saveFeedback = async () => {
     try {
       // Get existing feedback from localStorage
       const existingFeedback = JSON.parse(localStorage.getItem('anonymousFeedback') || '[]');
@@ -33,6 +34,16 @@ const FeedbackWidget = ({ results, language }) => {
       existingFeedback.push(feedback);
       localStorage.setItem('anonymousFeedback', JSON.stringify(existingFeedback));
 
+      // Also store encrypted version for GitHub export
+      const encryptedFeedback = await encryptFeedback(feedback);
+      const encryptedList = JSON.parse(localStorage.getItem('encryptedFeedback') || '[]');
+      encryptedList.push({
+        id: feedback.id,
+        timestamp: feedback.timestamp,
+        data: encryptedFeedback
+      });
+      localStorage.setItem('encryptedFeedback', JSON.stringify(encryptedList));
+
       return feedback;
     } catch (error) {
       console.error('Error saving feedback:', error);
@@ -40,10 +51,10 @@ const FeedbackWidget = ({ results, language }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    const feedback = saveFeedback();
+    const feedback = await saveFeedback();
     
     if (feedback) {
       setSubmitted(true);

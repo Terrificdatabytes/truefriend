@@ -1,0 +1,7 @@
+# Placeholder for encrypted feedback files
+
+Encrypted feedback submissions will be stored here.
+
+File naming: `feedback_encrypted_{timestamp}.json`
+
+See README.md for more information.
