@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Heart, AlertTriangle, Share2, Download, BarChart3, CheckCircle } from 'lucide-react';
+import { Heart, AlertTriangle, Share2, Download, BarChart3, CheckCircle, ChevronLeft } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { QUESTIONS, DIMENSIONS, getScoreCategory } from '../constants/questions';
+import { QUESTIONS, DIMENSIONS, getScoreCategory, getDimensionName } from '../constants/questions';
 import { saveAssessment, saveSettings, getSettings } from '../utils/storage';
 import DisclaimerBanner from './DisclaimerBanner';
 import ViewCounter from './ViewCounter';
 import ShareModal from './ShareModal';
 import ReportGenerator from './ReportGenerator';
 import FeedbackWidget from './FeedbackWidget';
+import FeedbackExport from './FeedbackExport';
 
 const FriendshipHealthCheckup = () => {
   const [language, setLanguage] = useState('english');
@@ -52,6 +53,12 @@ const FriendshipHealthCheckup = () => {
         calculateResults(newAnswers);
       }
     }, 300);
+  };
+
+  const handleBack = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1);
+    }
   };
 
   const calculateResults = (finalAnswers) => {
@@ -100,12 +107,15 @@ const FriendshipHealthCheckup = () => {
     const selfCenteredDetected = meTotal < themTotal - 20;
 
     // Get top 3 strengths and areas for improvement
-    const dimensionArray = Object.entries(dimensionScores).map(([id, scores]) => ({
-      id,
-      name: DIMENSIONS.find(d => d.id === id)?.name || id,
-      icon: DIMENSIONS.find(d => d.id === id)?.icon || '📊',
-      score: scores.total
-    }));
+    const dimensionArray = Object.entries(dimensionScores).map(([id, scores]) => {
+      const dimension = DIMENSIONS.find(d => d.id === id);
+      return {
+        id,
+        name: getDimensionName(dimension, language) || id,
+        icon: dimension?.icon || '📊',
+        score: scores.total
+      };
+    });
 
     dimensionArray.sort((a, b) => b.score - a.score);
     const strengths = dimensionArray.slice(0, 3);
@@ -243,11 +253,24 @@ const FriendshipHealthCheckup = () => {
             </div>
           </div>
 
+          {/* Back button */}
+          {currentQuestion > 0 && (
+            <div className="mb-4">
+              <button
+                onClick={handleBack}
+                className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-all"
+              >
+                <ChevronLeft className="w-5 h-5" />
+                <span>{language === 'english' ? 'Back' : 'Pinnaadi'}</span>
+              </button>
+            </div>
+          )}
+
           {/* Question card */}
           <div className="bg-white rounded-2xl shadow-xl p-8">
             <div className="mb-6">
               <span className="inline-block px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium mb-4">
-                {DIMENSIONS.find(d => d.id === question.dimension)?.icon} {DIMENSIONS.find(d => d.id === question.dimension)?.name}
+                {DIMENSIONS.find(d => d.id === question.dimension)?.icon} {getDimensionName(DIMENSIONS.find(d => d.id === question.dimension), language)}
               </span>
               <h2 className="text-2xl font-bold text-gray-800">
                 {question.text}
@@ -260,15 +283,22 @@ const FriendshipHealthCheckup = () => {
                 { value: 3, label: language === 'english' ? 'Agree' : 'Agree' },
                 { value: 2, label: language === 'english' ? 'Disagree' : 'Disagree' },
                 { value: 1, label: language === 'english' ? 'Strongly Disagree' : 'Romba Disagree' }
-              ].map((option) => (
-                <button
-                  key={option.value}
-                  onClick={() => handleAnswer(question.id, option.value)}
-                  className="w-full text-left px-6 py-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all font-medium"
-                >
-                  {option.label}
-                </button>
-              ))}
+              ].map((option) => {
+                const isSelected = answers[question.id] === option.value;
+                return (
+                  <button
+                    key={option.value}
+                    onClick={() => handleAnswer(question.id, option.value)}
+                    className={`w-full text-left px-6 py-4 border-2 rounded-lg transition-all font-medium ${
+                      isSelected
+                        ? 'border-blue-500 bg-blue-50'
+                        : 'border-gray-200 hover:border-blue-500 hover:bg-blue-50'
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -336,7 +366,7 @@ const FriendshipHealthCheckup = () => {
                   <div key={dim.id}>
                     <div className="flex justify-between items-center mb-2">
                       <span className="font-medium text-gray-700">
-                        {dim.icon} {dim.name}
+                        {dim.icon} {getDimensionName(dim, language)}
                       </span>
                       <span className="font-bold" style={{ color: dimCategory.color }}>
                         {Math.round(score)}%
@@ -435,6 +465,10 @@ const FriendshipHealthCheckup = () => {
           </div>
 
           <FeedbackWidget results={results} language={language} />
+
+          <FeedbackExport language={language} />
+
+          <ViewCounter language={language} />
 
           <DisclaimerBanner language={language} variant="results" />
 
